@@ -24,6 +24,7 @@ type GuildSettings struct {
 	lock                     sync.RWMutex
 	UnmuteDeadDuringTasks    bool   `json:"unmuteDeadDuringTasks"`
 	AutoRefresh              bool   `json:"autoRefresh"`
+	LobbyChannelID           string `json:"lobbyChannelID"`
 	MatchSummaryChannelID    string `json:"matchSummaryChannelID"`
 	LeaderboardMention       bool   `json:"leaderboardMention"`
 	LeaderboardSize          int    `json:"leaderboardSize"`
@@ -46,6 +47,7 @@ func MakeGuildSettings() *GuildSettings {
 		DeleteGameSummaryMinutes: 0, //-1 for never delete the match summary
 		AutoRefresh:              false,
 		MapVersion:               "simple",
+		LobbyChannelID:           "",
 		MatchSummaryChannelID:    "",
 		LeaderboardMention:       true,
 		LeaderboardSize:          3,
@@ -117,6 +119,14 @@ func (gs *GuildSettings) GetDeleteGameSummaryMinutes() int {
 
 func (gs *GuildSettings) SetDeleteGameSummaryMinutes(num int) {
 	gs.DeleteGameSummaryMinutes = num
+}
+
+func (gs *GuildSettings) SetLobbyChannelID(id string) {
+    gs.LobbyChannelID = id
+}
+
+func (gs *GuildSettings) GetLobbyChannelID() string {
+	return gs.LobbyChannelID
 }
 
 func (gs *GuildSettings) SetMatchSummaryChannelID(id string) {

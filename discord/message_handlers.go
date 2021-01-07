@@ -560,7 +560,12 @@ func (bot *Bot) handleGameStartMessage(s *discordgo.Session, m *discordgo.Messag
 		}
 	}
 
-	dgs.CreateMessage(s, bot.gameStateResponse(dgs, sett), m.ChannelID, m.Author.ID)
+    var lobbyChannel = sett.GetLobbyChannelID();
+	if (lobbyChannel == "") {
+	    dgs.CreateMessage(s, bot.gameStateResponse(dgs, sett), m.ChannelID, m.Author.ID)
+	} else {
+	    dgs.CreateMessage(s, bot.gameStateResponse(dgs, sett), lobbyChannel, m.Author.ID)
+	}
 
 	bot.RedisInterface.SetDiscordGameState(dgs, lock)
 
