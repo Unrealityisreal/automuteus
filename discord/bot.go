@@ -323,7 +323,12 @@ func (bot *Bot) RefreshGameStateMessage(gsr GameStateRequest, sett *storage.Guil
 
 	if dgs.GameStateMsg.MessageChannelID != "" {
 		dgs.DeleteGameStateMsg(bot.PrimarySession) // delete the old message
-		dgs.CreateMessage(bot.PrimarySession, bot.gameStateResponse(dgs, sett), dgs.GameStateMsg.MessageChannelID, dgs.GameStateMsg.LeaderID)
+		var lobbyChannel = sett.GetLobbyChannelID();
+	    if (lobbyChannel == "") {
+			dgs.CreateMessage(bot.PrimarySession, bot.gameStateResponse(dgs, sett), dgs.GameStateMsg.MessageChannelID, dgs.GameStateMsg.LeaderID)
+	    } else {
+		    dgs.CreateMessage(bot.PrimarySession, bot.gameStateResponse(dgs, sett), lobbyChannel, dgs.GameStateMsg.LeaderID)
+	    }
 		metrics.RecordDiscordRequests(bot.RedisInterface.client, metrics.MessageCreateDelete, 2)
 	}
 

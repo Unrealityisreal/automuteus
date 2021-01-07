@@ -15,6 +15,7 @@ const (
 	MapVersion
 	MatchSummary
 	MatchSummaryChannel
+	LobbyChannel
 	AutoRefresh
 	LeaderboardMention
 	LeaderboardSize
@@ -206,6 +207,25 @@ var AllSettings = []Setting{
 		},
 		Aliases: []string{"matchsumm", "matchsum", "summary", "match", "summ", "sum"},
 		Premium: true,
+	},
+	{
+		SettingType: LobbyChannel,
+		Name:        "lobbyChannel",
+		Example:     "lobbyChannel general",
+		ShortDesc: &i18n.Message{
+			ID:    "settings.AllSettings.LobbyChannel.shortDesc",
+			Other: "Channel for lobby info",
+		},
+		Description: &i18n.Message{
+			ID:    "settings.AllSettings.LobbyChannel.desc",
+			Other: "Specify the text channel name where Lobby data should be posted",
+		},
+		Arguments: &i18n.Message{
+			ID:    "settings.AllSettings.LobbyChannel.args",
+			Other: "<text channel name>",
+		},
+		Aliases: []string{"lobbychan", "lobbych", "lobch"},
+		Premium: false,
 	},
 	{
 		SettingType: MatchSummaryChannel,

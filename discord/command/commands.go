@@ -254,7 +254,7 @@ var AllCommands = []Command{
 		},
 		Aliases:    []string{"f"},
 		IsSecret:   true, // force is broken rn, so hide it
-		Emoji:      "📢",
+		Emoji:      "💪",
 		IsAdmin:    false,
 		IsOperator: true,
 	},
@@ -312,7 +312,7 @@ var AllCommands = []Command{
 		},
 		Description: &i18n.Message{
 			ID:    "commands.AllCommands.Privacy.desc",
-			Other: "AutoMuteUs privacy and data collection details.\nMore details [here](https://github.com/denverquane/automuteus/blob/master/PRIVACY.md)",
+			Other: "AutoMuteUs privacy and data collection details.\nMore details [here](https://github.com/Unrealityisreal/automuteus/blob/master/PRIVACY.md)",
 		},
 		Arguments: &i18n.Message{
 			ID:    "commands.AllCommands.Privacy.args",
@@ -429,7 +429,8 @@ var AllCommands = []Command{
 			Other: "<@discord user> <is imposter> (true|false) <x impostor remains> (count)",
 		},
 		Aliases:    []string{"ascii", "asc"},
-		IsSecret:   true,
+		IsSecret:   false,
+		Emoji:      "A",
 		IsAdmin:    false,
 		IsOperator: false,
 	},
@@ -450,9 +451,10 @@ var AllCommands = []Command{
 			Other: "None",
 		},
 		Aliases:    []string{"debug", "ds", "state"},
-		IsSecret:   true,
-		IsAdmin:    false,
-		IsOperator: true,
+		IsSecret:   false,
+		Emoji:      "🐛",
+		IsAdmin:    true,
+		IsOperator: false,
 	},
 	{
 		CommandType: Null,

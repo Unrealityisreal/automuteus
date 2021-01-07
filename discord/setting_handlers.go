@@ -128,6 +128,8 @@ func (bot *Bot) HandleSettingsCommand(s *discordgo.Session, m *discordgo.Message
 			break
 		}
 		isValid = SettingMatchSummary(s, m, sett, args)
+	case setting.LobbyChannel:
+		isValid = SettingLobbyChannel(s, m, sett, args)
 	case setting.MatchSummaryChannel:
 		if !prem {
 			s.ChannelMessageSend(m.ChannelID, nonPremiumSettingResponse(sett))
@@ -814,6 +816,53 @@ func SettingMatchSummary(s *discordgo.Session, m *discordgo.MessageCreate, sett 
 	}
 
 	return true
+}
+
+func SettingLobbyChannel(s *discordgo.Session, m *discordgo.MessageCreate, sett *storage.GuildSettings, args []string) bool {
+	if len(args) == 2 {
+		embed := ConstructEmbedForSetting(sett.GetLobbyChannelID(), setting.AllSettings[setting.LobbyChannel], sett)
+		s.ChannelMessageSendEmbed(m.ChannelID, &embed)
+		return false
+	}
+
+	// now to find the channel they are referencing
+	channelID := ""
+	channelName := "" // we track name to confirm to the User they selected the right channel
+	channelList, _ := s.GuildChannels(m.GuildID)
+	for _, c := range channelList {
+		// Check if channel is a text channel
+		if c.Type != discordgo.ChannelTypeGuildText {
+			continue
+		}
+		// check if this is the right channel
+		if strings.ToLower(c.Name) == args[2] || c.ID == args[2] {
+			channelID = c.ID
+			channelName = c.Name
+			break
+		}
+	}
+
+	// check if channel was found
+	if channelID == "" {
+		s.ChannelMessageSend(m.ChannelID, sett.LocalizeMessage(&i18n.Message{
+			ID:    "settings.SettingLobbyChannel.withoutChannelID",
+			Other: "Could not find the text channel `{{.channelName}}`! Pass in the name or the ID, and make sure the bot can see it.",
+		},
+			map[string]interface{}{
+				"channelName": args[2],
+			}))
+		return false
+	} else {
+		s.ChannelMessageSend(m.ChannelID, sett.LocalizeMessage(&i18n.Message{
+			ID:    "settings.SettingLobbyChannel.withChannelName",
+			Other: "Match Summary text channel changed to `{{.channelName}}`!",
+		},
+			map[string]interface{}{
+				"channelName": channelName,
+			}))
+		sett.SetLobbyChannelID(channelID)
+		return true
+	}
 }
 
 func SettingMatchSummaryChannel(s *discordgo.Session, m *discordgo.MessageCreate, sett *storage.GuildSettings, args []string) bool {
